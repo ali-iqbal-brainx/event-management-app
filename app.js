@@ -1,9 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
+const db = require('./configs/mongoDb');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
+const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 
@@ -58,6 +63,13 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 }));
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+db.connection()
+    .then(() => {
+        console.log("DB connected successfully")
+        app.listen(port, () => {
+            console.log(`app listening on port ${port}`);
+        })
+    })
+    .catch((err) => {
+        console.log(err)
+    });
