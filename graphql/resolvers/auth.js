@@ -6,9 +6,9 @@ const jwtService = require('../../services/jwtService');
 module.exports = {
     createUser: async (args) => {
         try {
-            if (!request?.isAuth) {
-                throw new Error(request?.message);
-            }
+            // if (!request?.isAuth) {
+            //     throw new Error(request?.message);
+            // }
 
             const user = await User.findOne({ email: args.userInput.email });
             if (user) {

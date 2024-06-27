@@ -5,9 +5,9 @@ const { transformEvent } = require('../../helpers/merge');
 module.exports = {
     events: async (args, request) => {
         try {
-            if (!request?.isAuth) {
-                throw new Error(request?.message);
-            }
+            // if (!request?.isAuth) {
+            //     throw new Error(request?.message);
+            // }
             let events = await Event.find();
             return events.map(event => {
                 return transformEvent(event);
@@ -18,6 +18,7 @@ module.exports = {
     },
     createEvent: async (args, request) => {
         try {
+            const user = request.user;
             if (!request?.isAuth) {
                 throw new Error(request?.message);
             }
@@ -26,7 +27,7 @@ module.exports = {
                 description: args.eventInput.description,
                 price: +args.eventInput.price,
                 date: dateToString(args.eventInput.date),
-                creator: "666946172deb262234c07240"
+                creator: user?._id
             });
 
             const result = await event.save();

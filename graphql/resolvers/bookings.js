@@ -6,11 +6,12 @@ const mongoose = require('mongoose');
 module.exports = {
     bookings: async (args, request) => {
         try {
+            const user = request.user;
             if (!request?.isAuth) {
                 throw new Error(request?.message);
             }
 
-            const bookings = await Booking.find();
+            const bookings = await Booking.find({ user: user?._id });
             return bookings.map(booking => {
                 return transformBooking(booking);
             })
@@ -20,6 +21,7 @@ module.exports = {
     },
     bookEvent: async (args, request) => {
         try {
+            const user = request.user;
             if (!request?.isAuth) {
                 throw new Error(request?.message);
             }
@@ -29,7 +31,7 @@ module.exports = {
                 throw new Error('Invalid Event Id');
             }
             const booking = new Booking({
-                user: new mongoose.Types.ObjectId('6673e0a0aeebd087d6750c13'),
+                user: user?._id,
                 event: fetchedEvent?._id
             });
 
